@@ -50,6 +50,7 @@ async function createUser(request, response, next) {
     const name = request.body.name;
     const email = request.body.email;
     const password = request.body.password;
+    const confirmPassword = request.body.confirmPassword;
 
     // nomor 1
     const emailTake = await usersService.cekEmailAmbil(email);
@@ -58,6 +59,11 @@ async function createUser(request, response, next) {
         errorTypes.EMAIL_ALREADY_TAKEN,
         'Email Already Taken'
       );
+    }
+
+    // nomor 2
+    if (password !== confirmPassword) {
+      throw errorResponder(errorTypes.INVALID_PASSWORD, 'Password tidak sama');
     }
 
     const success = await usersService.createUser(name, email, password);
