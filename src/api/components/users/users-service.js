@@ -1,5 +1,6 @@
 const usersRepository = require('./users-repository');
 const { hashPassword } = require('../../../utils/password');
+const bcrypt = require('bcrypt');
 
 /**
  * Get list of users
@@ -107,6 +108,7 @@ async function deleteUser(id) {
   return true;
 }
 
+// nomor 1
 /**
  * mendapatkan detail dari user
  * @param {string} id
@@ -117,6 +119,56 @@ async function cekEmailAmbil(email) {
   return exits;
 }
 
+// Nomor 3
+/**
+ * komparasi passwords
+ * @param {string} inputPassword
+ * @param {string} hashedPassword
+ * @returns {boolean}
+ */
+async function comparePasswords(inputPassword, hashedPassword) {
+  return await bcrypt.compare(inputPassword, hashedPassword);
+}
+
+/**
+ * Change user password
+ * @param {string} id - User ID
+ * @param {string} passwordLama - Old Password
+ * @param {string} passwordBaru - New Password
+ * @param {string} konfirmasiPassword - Confirm New Password
+ * @returns {boolean}
+ */
+async function changePassword(id, passwordLama, passwordBaru, confirmPassword) {
+  const user = await usersRepository.getUser(id);
+
+  if (!user) {
+    return null; // User not found
+  }
+
+  // Check if old password matches
+  const isOldPasswordCorrect = await comparePasswords(
+    passwordLama,
+    user.password
+  );
+  if (!isOldPasswordCorrect) {
+    return false;
+  }
+
+  if (passwordBaru !== confirmPassword) {
+    return false;
+  }
+
+  const hashedNewPassword = await hashPassword(passwordBaru);
+
+  try {
+    await usersRepository.updatePassword(id, hashedNewPassword);
+  } catch (err) {
+    return false;
+  }
+
+  return true;
+}
+
 module.exports = {
   getUsers,
   getUser,
@@ -124,4 +176,6 @@ module.exports = {
   updateUser,
   deleteUser,
   cekEmailAmbil,
+  changePassword,
+  comparePasswords,
 };

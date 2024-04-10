@@ -21,4 +21,28 @@ module.exports = {
       email: joi.string().email().required().label('Email'),
     },
   },
+
+  // Nomor 3
+  changePassword: {
+    body: {
+      passwordLama: joi
+        .string()
+        .min(1)
+        .max(100)
+        .required()
+        .label('passwordLama'),
+      passwordBaru: joi
+        .string()
+        .min(1)
+        .max(100)
+        .required()
+        .label('passwordBaru'),
+      konfirmasiPassword: joi
+        .string()
+        .min(1)
+        .max(100)
+        .required()
+        .label('konfirmasiPassword'),
+    },
+  },
 };

@@ -72,6 +72,26 @@ async function checkEmail(email) {
   return emailAda;
 }
 
+// Nomor 3
+/**
+ * Update user password
+ * @param {string} id - User ID
+ * @param {string} newPassword - Hashed New Password
+ * @returns {Promise}
+ */
+async function updatePassword(id, newPassword) {
+  return User.updateOne(
+    {
+      _id: id,
+    },
+    {
+      $set: {
+        password: newPassword,
+      },
+    }
+  );
+}
+
 module.exports = {
   getUsers,
   getUser,
@@ -79,4 +99,5 @@ module.exports = {
   updateUser,
   deleteUser,
   checkEmail,
+  updatePassword,
 };
