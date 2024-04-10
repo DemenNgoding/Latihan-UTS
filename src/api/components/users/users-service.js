@@ -107,10 +107,21 @@ async function deleteUser(id) {
   return true;
 }
 
+/**
+ * mendapatkan detail dari user
+ * @param {string} id
+ * @returns {Object}
+ */
+async function cekEmailAmbil(email) {
+  const exits = await usersRepository.checkEmail(email);
+  return exits;
+}
+
 module.exports = {
   getUsers,
   getUser,
   createUser,
   updateUser,
   deleteUser,
+  cekEmailAmbil,
 };

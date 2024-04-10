@@ -62,10 +62,21 @@ async function deleteUser(id) {
   return User.deleteOne({ _id: id });
 }
 
+/**
+ * cek email sudah diambil atau belum
+ * @param {string}
+ * @returns {Promise}
+ */
+async function checkEmail(email) {
+  const emailAda = await User.findOne({ email });
+  return emailAda;
+}
+
 module.exports = {
   getUsers,
   getUser,
   createUser,
   updateUser,
   deleteUser,
+  checkEmail,
 };
